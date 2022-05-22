@@ -1,8 +1,12 @@
-from django.shortcuts import render, redirect
-from django.views.generic import View, RedirectView
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import View, RedirectView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import LoginForm
+from .forms import LoginForm, EditProfileForm
+
+from .models import User
 
 
 class LoginPageView(View):
@@ -37,3 +41,13 @@ class LogoutView(RedirectView):
     def get(self, request, *args, **kwargs):
         logout(request)
         return super(LogoutView, self).get(request, *args, **kwargs)
+
+
+class EditUserProfileView(LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = EditProfileForm
+    template_name = "profiles/user_profile.html"
+    success_url = reverse_lazy('index')
+
+    def get_object(self, queryset=None):
+        return self.request.user
