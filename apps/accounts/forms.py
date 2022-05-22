@@ -14,3 +14,9 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name']
+
+
+class EditUserSESForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['is_ses']

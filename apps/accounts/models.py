@@ -10,6 +10,7 @@ from .managers import CustomUserManager
 class User(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
+    is_ses = models.BooleanField(_('Simple Electronic Signature'), default=False)
     history = HistoricalRecords()
 
     USERNAME_FIELD = 'email'
