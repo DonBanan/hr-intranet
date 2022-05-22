@@ -6,6 +6,11 @@
 {% if user.is_authenticated %}
 	<a href="{% url 'profile' %}">Профиль</a>
 	<a href="{% url 'logout' %}">Выйти</a>
+	{{ user }}
+	<br>
+	{% for history in user.history.all %}
+		{{ history.email }} - {{ history.history_change_reason }} ({{ history.history_date }})<br>
+	{% endfor %}
 {% else %}
 	<a href="{% url 'login' %}">Войти</a>
 {% endif %}

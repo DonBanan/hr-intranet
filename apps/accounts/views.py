@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import View, RedirectView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login, logout
+
+from simple_history.utils import update_change_reason
 
 from .forms import LoginForm, EditProfileForm
 
@@ -30,6 +32,7 @@ class LoginPageView(View):
             )
             if user is not None:
                 login(request, user)
+                update_change_reason(user, 'Login')
                 return redirect('/')
         message = 'Login failed!'
         return render(request, self.template_name, context={'form': form, 'message': message})
@@ -51,3 +54,7 @@ class EditUserProfileView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+    def get_success_url(self):
+        update_change_reason(self.request.user, 'Update profile')
+        return reverse('index')
