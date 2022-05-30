@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.views.generic import View, RedirectView, UpdateView
+from django.views.generic import View, RedirectView, UpdateView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login, logout
 
@@ -34,15 +34,19 @@ class LoginPageView(View):
             if user is not None:
                 login(request, user)
                 update_change_reason(user, 'Login')
-                return redirect('/')
+                if user.seen_welcome is False:
+                    return redirect('/')
+                else:
+                    return redirect('/')
         message = 'Login failed!'
         return render(request, self.template_name, context={'form': form, 'message': message})
 
 
 class LogoutView(RedirectView):
-    url = '/auth/login/'
+    url = '/'
 
     def get(self, request, *args, **kwargs):
+        update_change_reason(request.user, 'Logout')
         logout(request)
         return super(LogoutView, self).get(request, *args, **kwargs)
 

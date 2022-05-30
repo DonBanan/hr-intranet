@@ -8,9 +8,19 @@ from .managers import CustomUserManager
 
 
 class User(AbstractUser):
+    USER_TYPES = (
+        ('admin', _('Admin')),
+        ('hrg', _('HR-generalist')),
+        ('employee', _('Employee')),
+        ('service', _('Service Account')),
+    )
     username = None
     email = models.EmailField(_('email address'), unique=True)
+    user_type = models.CharField(max_length=60, choices=USER_TYPES, default='employee')
+    gender = models.BooleanField(_('Gender'), null=True)
     is_ses = models.BooleanField(_('Simple Electronic Signature'), default=False)
+    user_locked = models.BooleanField(default=False)
+    seen_welcome = models.BooleanField(default=False)
     history = HistoricalRecords()
 
     USERNAME_FIELD = 'email'
