@@ -3,38 +3,14 @@
 {% block title %}Hr intranet{% endblock %}
 
 {% block content %}
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary nav-justified">
-		<div class="container-fluid">
-			<a class="navbar-brand" href="#">HR Intranet</a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNavDropdown">
-				<ul class="navbar-nav">
-					{% if user.is_authenticated %}
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							{{ user }}
-							</a>
-							<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-								<li><a class="dropdown-item" href="{% url 'profile' %}">Профиль</a></li>
-								<li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
-							</ul>
-						</li>
-					{% else %}
-						<li class="nav-item">
-							<a class="nav-link active" href="{% url 'login' %}">Войти</a>
-						</li>
-					{% endif %}
-				</ul>
-			</div>
-		</div>
-	</nav>
-	<div class="p-5 mb-4 bg-light rounded-3">
+	<div class="p-5 mb-5 bg-light rounded-3">
 		<div class="container-fluid py-5">
-			<h1 class="display-5 fw-bold">Custom jumbotron</h1>
-			<p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your liking.</p>
-			<button class="btn btn-primary btn-lg" type="button">Example button</button>
+			<h1 class="display-5 fw-bold">Купи сейчас плати потом!</h1>
+			<p class="col-md-8 fs-4">Мобильный офис который всегда с вами оплата телефоном через QR Code.</p>
+			<p class="col-md-8 fs-6">- все сферы услуг для рассрочки онлайн 24/7</p>
+    		<p class="col-md-8 fs-6">- оплата телефоном через QR Code</p>
+			<p class="col-md-8 fs-6">- различные акции и бонусы от партнеров</p>
+			<button class="btn btn-primary btn-lg" type="button">Перейти в админ-панель</button>
 		</div>
 	</div>
 	<div class="container-fluid">
@@ -63,7 +39,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					{% for history in user.history.all %}
+					{% for history in user.history.all|slice:":10" %}
 						<tr>
 						  <td>{{ history.email }}</td>
 						  <td>{{ history.history_change_reason }}</td>
@@ -72,6 +48,9 @@
 					{% endfor %}
 				</tbody>
 			</table>
+			<div class="d-grid mb-5 gap-2 col-2 mx-auto">
+				<a href="{% url 'historical-records' %}" class="btn btn-primary" type="submit">Посмотреть всю историю</a>
+			</div>
 		{% endif %}
 	</div>
 {% endblock %}

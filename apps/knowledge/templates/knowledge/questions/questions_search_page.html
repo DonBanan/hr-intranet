@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Hr intranet{% endblock %}
+
+{% block content %}
+	<div class="container-fluid mt-3">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="/">Главная</a></li>
+				<li class="breadcrumb-item">
+					<a href="{% url 'knowledge-category-list' %}">Knowledge base</a>
+				</li>
+				<li class="breadcrumb-item active" aria-current="page">Search page</li>
+			</ol>
+		</nav>
+
+		<h3 class="mb-5">
+			Questions
+		</h3>
+		<div class="input-group mb-5">
+			<input type="text" class="form-control" placeholder="Введите вопрос"
+				   aria-label="Recipient's username" aria-describedby="button-addon2" value="{{ search }}">
+			<button class="btn btn-outline-secondary" type="button" id="button-addon2">Найти</button>
+		</div>
+		<table class="table table-bordered">
+			<thead class="table-dark">
+				<tr>
+				  <th scope="col">Вопрос</th>
+				  <th scope="col">Дата добавления</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for question in questions %}
+					<tr>
+					  <td>
+						  <a href="{{ question.get_absolute_url }}">{{ question.title }}</a>
+					  </td>
+					  <td>{{ question.created_at|date:"d-m-Y" }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Hr intranet{% endblock %}
+
+{% block content %}
+	<div class="container-fluid mt-3">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="/">Главная</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Knowledge base</li>
+			</ol>
+		</nav>
+
+		{% if categories.count %}
+			<div class="d-flex justify-content-between">
+				<h3 class="mb-5">
+					Knowledge base
+				</h3>
+				<div class="btn-group mb-5" role="group">
+					<a href="{% url 'knowledge-category-create' %}" type="submit"
+					   class="btn btn-outline-primary">Добавить новую базу</a>
+				</div>
+			</div>
+			<div class="input-group mb-5">
+				<input type="text" class="form-control" placeholder="Введите вопрос"
+					   aria-label="Recipient's username" aria-describedby="button-addon2">
+				<button class="btn btn-outline-secondary" type="button" id="button-addon2">Найти</button>
+			</div>
+			<div class="row">
+				{% for category in categories %}
+					<div class="col-sm-3">
+						<div class="card text-center">
+							<div class="card-body">
+								<h5 class="card-title">{{ category.title }}</h5>
+								<a href="{{ category.get_absolute_url }}" class="btn btn-primary">Перейти к вопросам</a>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		{% endif %}
+	</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Hr intranet{% endblock %}
+
+{% block content %}
+	<div class="container-fluid mt-3">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="/">Главная</a></li>
+				<li class="breadcrumb-item">
+					<a href="{% url 'knowledge-category-list' %}">Knowledge base</a>
+				</li>
+				{% if category.parent %}
+                    <li class="breadcrumb-item">
+                        <a href="{{ category.parent.get_absolute_url }}">{{ category.parent.title }}</a>
+                    </li>
+                {% endif %}
+				<li class="breadcrumb-item active" aria-current="page">{{ category.title }}</li>
+			</ol>
+		</nav>
+
+		{% if category.children.count %}
+			<h3 class="mb-3">
+				{{ category.title }}
+			</h3>
+			<div class="row">
+				{% for category in category.children.all %}
+					<div class="col-sm-3">
+						<div class="card text-center">
+							<div class="card-body">
+								<h5 class="card-title">{{ category.title }}</h5>
+								<a href="{{ category.get_absolute_url }}" class="btn btn-primary">Перейти к вопросам</a>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		{% endif %}
+
+		{% if category.questions.count %}
+			<h3 class="mb-5">
+				Questions
+			</h3>
+			<form action="{% url 'knowledge-questions-search' %}" method="get">
+				<div class="input-group mb-5">
+					<input type="text" class="form-control" placeholder="Введите вопрос" name="text"
+						   aria-label="Введите вопрос" aria-describedby="button-addon2">
+					<button class="btn btn-outline-secondary" type="submit" id="button-addon2">Найти</button>
+				</div>
+			</form>
+			<table class="table table-bordered">
+				<thead class="table-dark">
+					<tr>
+					  <th scope="col">Вопрос</th>
+					  <th scope="col">Дата добавления</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for question in category.questions.all %}
+						<tr>
+						  <td>
+							  <a href="{{ question.get_absolute_url }}">{{ question.title }}</a>
+						  </td>
+						  <td>{{ question.created_at|date:"d-m-Y" }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<div class="d-grid mb-5 gap-2 col-2 mx-auto">
+				<a href="{% url 'historical-records' %}" class="btn btn-primary" type="submit">Пройти тест</a>
+			</div>
+		{% endif %}
+	</div>
+{% endblock %}
