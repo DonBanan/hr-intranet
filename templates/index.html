@@ -1,8 +1,32 @@
 {% extends "base.html" %}
 
+{% load mood_check %}
+
 {% block title %}Hr intranet{% endblock %}
 
 {% block content %}
+
+	<style>
+		input[type=checkbox] {
+			display: none;
+		}
+		svg {
+			width: 4em;
+			height: 4em;
+			display: inline-block;
+			padding: 3px;
+		}
+		input[type=checkbox]:checked + .red {
+			color: #dc3545;
+		}
+		input[type=checkbox]:checked + .yellow {
+			color: #007bff;
+		}
+		input[type=checkbox]:checked + .green {
+			color: #28a745;
+		}
+	</style>
+
 	<div class="p-5 mb-5 bg-light rounded-3">
 		<div class="container-fluid py-5">
 			<h1 class="display-5 fw-bold">Купи сейчас плати потом!</h1>
@@ -14,16 +38,61 @@
 		</div>
 	</div>
 	<div class="container-fluid">
-		{% if user.is_authenticated %}
-			{% if not user.is_ses %}
-				<div class="alert alert-primary text-center" role="alert">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
-						<path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-					</svg>
-					Вам необходимо дать разрешение на создание
-					<a href="{% url 'profile-ses' %}" class="alert-link">простой электронной подписи</a>.
+		{% if not user.is_ses %}
+			<div class="alert alert-primary text-center" role="alert">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+					<path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+				</svg>
+				Вам необходимо дать разрешение на создание
+				<a href="{% url 'profile-ses' %}" class="alert-link">простой электронной подписи</a>.
+			</div>
+		{% endif %}
+
+		{% mood_check user today as mood_today %}
+		{% if not mood_today %}
+			<div class="mt-5 mb-5">
+				<h3 class="mb-5">
+					Niko-Niko my mood today is:
+				</h3>
+				<div class="d-flex d-flex justify-content-around">
+					<label class="mr-2">
+						<input class="mood" type="checkbox" data-val="0">
+						<div class="red">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-emoji-angry" viewBox="0 0 16 16">
+							  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+							  <path d="M4.285 12.433a.5.5 0 0 0 .683-.183A3.498 3.498 0 0 1 8 10.5c1.295 0 2.426.703 3.032 1.75a.5.5 0 0 0 .866-.5A4.498 4.498 0 0 0 8 9.5a4.5 4.5 0 0 0-3.898 2.25.5.5 0 0 0 .183.683zm6.991-8.38a.5.5 0 1 1 .448.894l-1.009.504c.176.27.285.64.285 1.049 0 .828-.448 1.5-1 1.5s-1-.672-1-1.5c0-.247.04-.48.11-.686a.502.502 0 0 1 .166-.761l2-1zm-6.552 0a.5.5 0 0 0-.448.894l1.009.504A1.94 1.94 0 0 0 5 6.5C5 7.328 5.448 8 6 8s1-.672 1-1.5c0-.247-.04-.48-.11-.686a.502.502 0 0 0-.166-.761l-2-1z"/>
+							</svg>
+						</div>
+					</label>
+					<label class="mr-2">
+						<input class="mood" type="checkbox" data-val="1">
+						<div class="red">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-emoji-frown" viewBox="0 0 16 16">
+							  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+							  <path d="M4.285 12.433a.5.5 0 0 0 .683-.183A3.498 3.498 0 0 1 8 10.5c1.295 0 2.426.703 3.032 1.75a.5.5 0 0 0 .866-.5A4.498 4.498 0 0 0 8 9.5a4.5 4.5 0 0 0-3.898 2.25.5.5 0 0 0 .183.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
+							</svg>
+						</div>
+					</label>
+					<label>
+						<input class="mood" type="checkbox" data-val="2">
+						<div class="yellow">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-emoji-neutral" viewBox="0 0 16 16">
+							  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+							  <path d="M4 10.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7a.5.5 0 0 0-.5.5zm3-4C7 5.672 6.552 5 6 5s-1 .672-1 1.5S5.448 8 6 8s1-.672 1-1.5zm4 0c0-.828-.448-1.5-1-1.5s-1 .672-1 1.5S9.448 8 10 8s1-.672 1-1.5z"/>
+							</svg>
+						</div>
+					</label>
+					<label>
+						<input class="mood" type="checkbox" data-val="3">
+						<div class="green">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-emoji-smile" viewBox="0 0 16 16">
+							  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+							  <path d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
+							</svg>
+						</div>
+					</label>
 				</div>
-			{% endif %}
+			</div>
 		{% endif %}
 
 		{% if user.history.count %}
@@ -48,9 +117,30 @@
 					{% endfor %}
 				</tbody>
 			</table>
-			<div class="d-grid mb-5 gap-2 col-2 mx-auto">
+			<div class="d-grid mb-5 col-md-4 m-auto">
 				<a href="{% url 'historical-records' %}" class="btn btn-primary" type="submit">Посмотреть всю историю</a>
 			</div>
 		{% endif %}
 	</div>
+
+	{% csrf_token %}
+	<script>
+		$(document).ready(function() {
+			const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+			$('.mood').click(function() {
+				if (confirm('Are you sure?')) {
+					$.ajax({
+						type: "POST",
+						headers: { "X-CSRFToken": csrftoken },
+						url: "/niko-niko/create/",
+						data: {"mood": $(this).attr("data-val")},
+						success: function(result){
+							location.reload(true);
+						},
+					});
+				}
+			});
+		});
+	</script>
 {% endblock %}

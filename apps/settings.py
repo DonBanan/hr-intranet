@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     'apps.accounts',
     'apps.knowledge',
+    'apps.mood_practice',
 ]
 
 MIDDLEWARE = [

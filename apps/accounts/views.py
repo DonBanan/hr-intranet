@@ -1,3 +1,7 @@
+import calendar
+
+from datetime import date
+
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -55,6 +59,12 @@ class EditUserProfileView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = EditProfileForm
     template_name = "profiles/user_profile.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(EditUserProfileView, self).get_context_data(**kwargs)
+        c = calendar.Calendar()
+        context['dates'] = c.monthdatescalendar(date.today().year, date.today().month)
+        return context
 
     def get_object(self, queryset=None):
         return self.request.user
